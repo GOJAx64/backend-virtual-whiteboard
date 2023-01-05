@@ -22,11 +22,5 @@ const User = db.define('user', {
         type: DataTypes.BOOLEAN
     },
 });
-//TODO Encrypt password before to save the password
-
-//TODO Check encrypted passsword 
-export const checkPassword = ( passwordForm, passwordUser ) => {
-    return passwordForm === passwordUser ?  true : false ;
-}
 
 export default User;

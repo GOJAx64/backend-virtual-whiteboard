@@ -1,7 +1,8 @@
-import User, { checkPassword } from '../models/User.js';
+import User from '../models/User.js';
 import generateId from '../helpers/generateId.js';
 import generateJWT from '../helpers/generateJWT.js';
-import { emailRegistration, emailForgotPassword } from '../helpers/emails.js';
+import hashPassword from '../helpers/hashPassword.js';
+import checkPassword from '../helpers/checkPassword.js';
 
 export const register = async (req, res) => {
     const { body } = req;
@@ -18,6 +19,7 @@ export const register = async (req, res) => {
         user.id = generateId();
         user.token = generateId();
         user.confirmed = false;
+        user.password = await hashPassword(user.password);
         await user.save();
 
         // emailRegistration({
@@ -31,7 +33,6 @@ export const register = async (req, res) => {
         return res.status(500).json({ msg: error.message + " - Contacte al administrador" });
     }
 };
-
 
 export const authenticate = async(req, res) => {
     const {email, password} = req.body;
@@ -140,7 +141,7 @@ export const newPassword = async(req, res) => {
     try {
         const user = await User.findOne({ where: { token: token } });
         if(user) {
-            user.password = password;
+            user.password = await hashPassword(password);
             user.token = '';
             await user.save();
             res.json({ msg: "Contraseña modificada correctamente"});
