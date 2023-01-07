@@ -3,6 +3,7 @@ import generateId from '../helpers/generateId.js';
 import generateJWT from '../helpers/generateJWT.js';
 import hashPassword from '../helpers/hashPassword.js';
 import checkPassword from '../helpers/checkPassword.js';
+import { emailForgotPassword, emailRegistration } from '../helpers/emails.js';
 
 export const register = async (req, res) => {
     const { body } = req;
@@ -22,11 +23,11 @@ export const register = async (req, res) => {
         user.password = await hashPassword(user.password);
         await user.save();
 
-        // emailRegistration({
-        //     email: user.email,
-        //     name: user.name,
-        //     token: user.token,
-        // })
+        emailRegistration({
+            email: user.email,
+            name: user.name,
+            token: user.token,
+        })
 
         res.json({ msg: 'Enviamos un correo para confirmar tu cuenta'});    
     } catch (error) {
@@ -105,11 +106,11 @@ export const forgotPassword = async(req, res) => {
         user.token = generateId();
         await user.save();
         
-        // emailForgotPassword({
-        //     email: user.email,
-        //     name: user.name,
-        //     token: user.token, 
-        // });
+        emailForgotPassword({
+            email: user.email,
+            name: user.name,
+            token: user.token, 
+        });
 
         res.json( {msg: "Enviamos un correo con instrucciones"} );
     } catch (error) {
