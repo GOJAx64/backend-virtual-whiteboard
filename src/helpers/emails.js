@@ -19,7 +19,7 @@ export const emailRegistration = async( data ) => {
         text: 'Confirma tu cuenta en Pizarrones Virtuales',
         html: `<p>Hola: ${name}, confirma tu cuenta en Pizarrones Virtuales</p>
                <p>Tu cuenta ya está casi lista, solo accede al siguiente enlace:
-                    <a href="${process.env.FRONTEND_URL}/auth/confirm/${token}">Confirmar Cuenta</a>
+                    <a href="${process.env.FRONTEND_URL}/confirm_account/${token}">Confirmar Cuenta</a>
                </p>
                <p>Si tu no creaste esta cuenta, puedes ignorar el mensaje</p>`
     });
@@ -44,7 +44,7 @@ export const emailForgotPassword = async( data ) => {
         text: 'Reestablece tu contraseña',
         html: `<p>Hola: ${name}, has solicitado reestablecer tu contraseña</p>
                <p>accede al siguiente enlace para reestablecer tu contraseña:
-                    <a href="${process.env.FRONTEND_URL}/auth/forgot_password/${token}">Reestablecer contraseña</a>
+                    <a href="${process.env.FRONTEND_URL}/forgot_password/${token}">Reestablecer contraseña</a>
                </p>
                <p>Si tu no solicitaste este email, puedes ignorar el mensaje</p>`
     });

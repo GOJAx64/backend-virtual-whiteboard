@@ -53,7 +53,7 @@ export const authenticate = async(req, res) => {
     }
 
     //verify password 
-    if( checkPassword( password, user.password )) {
+    if( await checkPassword( password, user.password )) {
         res.json({
             id: user.id,
             name: user.name,
