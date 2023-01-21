@@ -1,5 +1,6 @@
 
 import { Sequelize } from 'sequelize';
+import setupModels from '../models/index.js';
 import config from './config.js';
 
 const db = new Sequelize(config.db, config.dbUser, config.dbPassword, {
@@ -7,5 +8,8 @@ const db = new Sequelize(config.db, config.dbUser, config.dbPassword, {
     dialect: config.dbDialect,
     logging: false,
 });
+
+setupModels(db);
+// db.sync();
 
 export default db;

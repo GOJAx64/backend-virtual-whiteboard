@@ -1,11 +1,26 @@
-import User from '../models/User.js';
+import { User } from '../models/User.js';
 import generateId from '../helpers/generateId.js';
 import generateJWT from '../helpers/generateJWT.js';
 import hashPassword from '../helpers/hashPassword.js';
 import checkPassword from '../helpers/checkPassword.js';
 import { emailForgotPassword, emailRegistration } from '../helpers/emails.js';
 
+import { spawn } from 'child_process';
+
+
 export const register = async (req, res) => {
+    // const pythonProcess = spawn('python', ['main.py'])
+    // let dataToSend;
+
+    // pythonProcess.stdout.on('data', (data) => {
+    //     console.log('Ejecutando python')
+    // });
+
+    // pythonProcess.on('close', (code) => {
+    //     console.log(`exit with code ${code}`)
+    //     // res.send(dataToSend)
+    // });
+
     const { body } = req;
 
     try {

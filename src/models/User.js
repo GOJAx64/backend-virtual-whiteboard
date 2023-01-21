@@ -1,19 +1,27 @@
-import { DataTypes } from 'sequelize';
-import db from '../config/db.js';
+import { DataTypes, Model } from 'sequelize';
+// import Board from './Board.js';
 
-const User = db.define('user', {
+export const USER_TABLE = 'users'
+
+export const UserSchema = {
     id: {
         type: DataTypes.STRING,
         primaryKey: true,
+        allowNull: false
     },
     name: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
     },
     email: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
     },
     password: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
     token: {
         type: DataTypes.STRING
@@ -21,6 +29,18 @@ const User = db.define('user', {
     confirmed: {
         type: DataTypes.BOOLEAN
     },
-});
+};
 
-export default User;
+export class User extends Model {
+    static associate() {
+        // User.hasMany(Board);
+    }
+
+    static config(sequelize){
+        return {
+            sequelize,
+            tableName: USER_TABLE,
+            modelName: 'User',
+        }
+    }
+}
