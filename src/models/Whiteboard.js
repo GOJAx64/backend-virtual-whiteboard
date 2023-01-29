@@ -27,7 +27,7 @@ export const WhiteboardSchema = {
             model: USER_TABLE
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
     }
 };
 

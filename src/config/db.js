@@ -10,5 +10,6 @@ const db = new Sequelize(config.db, config.dbUser, config.dbPassword, {
 });
 
 setupModels(db);
+db.sync();
 
 export default db;

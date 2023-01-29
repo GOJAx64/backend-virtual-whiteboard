@@ -26,14 +26,14 @@ export const ClassroomSchema = {
             model: USER_TABLE
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
     }
 };
 
 export class Classroom extends Model {
     static associate(models) {
         this.belongsTo(models.User, { as: 'user' })
-    }
+    }   
 
     static config(sequelize){
         return {
