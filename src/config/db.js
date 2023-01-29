@@ -1,6 +1,6 @@
 
 import { Sequelize } from 'sequelize';
-import setupModels from '../models/index.js';
+import setupModels from '../models/setUpModels.js';
 import config from './config.js';
 
 const db = new Sequelize(config.db, config.dbUser, config.dbPassword, {
