@@ -4,6 +4,7 @@ import cors from 'cors';
 import connectDB from './src/config/connectDB.js';
 import authRoutes from './src/routes/authRoutes.js';
 import classroomRoutes from './src/routes/classroomRoutes.js';
+import whiteboardRoutes from './src/routes/whiteboardRoutes.js';
 
 const app = express()
 
@@ -34,6 +35,7 @@ const corsOptions = {
 //Routing
 app.use('/api/auth', authRoutes);
 app.use('/api/classrooms', classroomRoutes);
+app.use('/api/whiteboards', whiteboardRoutes);
 
 const PORT = process.env.PORT || 4000;
 

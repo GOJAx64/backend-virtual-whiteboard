@@ -1,5 +1,6 @@
 import generateId from "../helpers/generateId.js";
 import { Classroom } from "../models/Classroom.js";
+import { Whiteboard } from "../models/Whiteboard.js";
 
 export const getClassrooms = async(req, res) => {
     const classrooms = await Classroom.findAll({ where: { userId: req.user.id } });
@@ -32,7 +33,13 @@ export const getClassroom = async(req, res) => {
         const error = new Error('401 - No tienes permisos para ver este contenido');
         return res.status(401).json({ msg: error.message });
     }
-    res.json(classroom);
+
+    const whiteboards = await Whiteboard.findAll({ where: { classroomId: classroom.id } });
+    
+    res.json({
+        classroom,
+        whiteboards
+    });
 };
 
 export const editClassroom = async(req, res) => {
@@ -76,24 +83,10 @@ export const deleteClassroom = async(req, res) => {
 
     try {
         await classroom.destroy();
-        res.json({ msg: "Proyecto Eliminado"});
+        res.json({ msg: "Aula Eliminada"});
     } catch (error) {
         return res.status(500).json({ msg: error.message + " - Contacte al administrador" });
     }
-};
-
-
-
-export const addWhiteboard = async(req, res) => {
-
-};
-
-export const deleteWhiteboard = async(req, res) => {
-
-};
-
-export const getWhiteboards = async(req, res) => {
-
 };
 
 export const addMember = async(req, res) => {

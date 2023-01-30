@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import { USER_TABLE } from './User.js';
+import { CLASSROOM_TABLE } from './Classroom.js';
 
 export const WHITEBOARD_TABLE = 'whiteboards'
 
@@ -12,19 +12,17 @@ export const WhiteboardSchema = {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
     },
     description: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
     },
-    userId: {
+    classroomId: {
         type: DataTypes.STRING,
-        field: 'user_id',
+        field: 'classroom_id',
         allowNull: false,
         references: {
-            model: USER_TABLE
+            model: CLASSROOM_TABLE
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -33,7 +31,7 @@ export const WhiteboardSchema = {
 
 export class Whiteboard extends Model {
     static associate(models) {
-        this.belongsTo(models.User, { as: 'user' })
+        this.belongsTo(models.Classroom, { as: 'classroom' })
     }
 
     static config(sequelize){
