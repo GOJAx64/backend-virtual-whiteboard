@@ -34,12 +34,9 @@ export const getClassroom = async(req, res) => {
         return res.status(401).json({ msg: error.message });
     }
 
-    const whiteboards = await Whiteboard.findAll({ where: { classroomId: classroom.id } });
+    // const whiteboards = await Whiteboard.findAll({ where: { classroomId: classroom.id } });
     
-    res.json({
-        classroom,
-        whiteboards
-    });
+    res.json(classroom);
 };
 
 export const editClassroom = async(req, res) => {

@@ -30,7 +30,7 @@ const corsOptions = {
   }
 }
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 //Routing
 app.use('/api/auth', authRoutes);
