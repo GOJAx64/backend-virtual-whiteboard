@@ -1,6 +1,5 @@
 import generateId from "../helpers/generateId.js";
 import { Classroom } from "../models/Classroom.js";
-import { Whiteboard } from "../models/Whiteboard.js";
 
 export const getClassrooms = async(req, res) => {
     const classrooms = await Classroom.findAll({ where: { userId: req.user.id } });
@@ -55,6 +54,7 @@ export const editClassroom = async(req, res) => {
 
     classroom.name = req.body.name || classroom.name;
     classroom.description = req.body.description || classroom.description;
+    classroom.summary = req.body.summary;
     
     try {
         const savedClassroom = await classroom.save();

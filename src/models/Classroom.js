@@ -17,6 +17,10 @@ export const ClassroomSchema = {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    summary: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
     userId: {
         type: DataTypes.STRING,
         field: 'user_id',
