@@ -1,15 +1,11 @@
-
 import { Sequelize } from 'sequelize';
-import setupModels from '../models/setUpModels.js';
-import config from './config.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const db = new Sequelize(config.db, config.dbUser, config.dbPassword, {
-    host: config.dbHost,
-    dialect: config.dbDialect,
+const db = new Sequelize(process.env.DB, process.env.DB_USER, process.env.DB_PASSWORD, {
+    host: 'localhost',
+    dialect: 'mysql',
     logging: false,
 });
-
-setupModels(db);
-db.sync();
 
 export default db;

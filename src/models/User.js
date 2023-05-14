@@ -1,18 +1,17 @@
-import { DataTypes, Model } from 'sequelize';
-// import Board from './Board.js';
+import { DataTypes } from 'sequelize';
+import db from '../config/db.js';
+import bcrypt from 'bcrypt';
 
-export const USER_TABLE = 'users'
-
-export const UserSchema = {
+export const User = db.define('users', {
     id: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
         allowNull: false
     },
     name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
     },
     email: {
         type: DataTypes.STRING,
@@ -27,20 +26,17 @@ export const UserSchema = {
         type: DataTypes.STRING
     },
     confirmed: {
-        type: DataTypes.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     },
-};
-
-export class User extends Model {
-    static associate() {
-        // User.hasMany(Board);
-    }
-
-    static config(sequelize){
-        return {
-            sequelize,
-            tableName: USER_TABLE,
-            modelName: 'User',
+}, {
+    hooks: {
+        beforeCreate: async function(user) {
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash( user.password, salt);
         }
     }
-}
+});
+
+// User.prototype.hashPassword
+// User.prototype.checkPassword =

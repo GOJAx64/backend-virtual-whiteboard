@@ -1,11 +1,11 @@
-import { DataTypes, Model } from 'sequelize';
-import { CLASSROOM_TABLE } from './Classroom.js';
+import { DataTypes } from 'sequelize';
+import db from '../config/db.js';
+import { Classroom } from './Classroom.js';
 
-export const WHITEBOARD_TABLE = 'whiteboards'
-
-export const WhiteboardSchema = {
+export const Whiteboard = db.define('whiteboards', {
     id: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
         allowNull: false
     },
@@ -18,27 +18,13 @@ export const WhiteboardSchema = {
         allowNull: false,
     },
     classroomId: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         field: 'classroom_id',
         allowNull: false,
         references: {
-            model: CLASSROOM_TABLE
+            model: Classroom
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
     }
-};
-
-export class Whiteboard extends Model {
-    static associate(models) {
-        this.belongsTo(models.Classroom, { as: 'classroom' })
-    }
-
-    static config(sequelize){
-        return {
-            sequelize,
-            tableName: WHITEBOARD_TABLE,
-            modelName: 'Whiteboard',
-        }
-    }
-}
+});

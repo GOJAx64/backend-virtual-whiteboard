@@ -1,5 +1,5 @@
-import generateId from "../helpers/generateId.js";
 import { Classroom } from "../models/Classroom.js";
+import { User } from "../models/User.js";
 
 export const getClassrooms = async(req, res) => {
     const classrooms = await Classroom.findAll({ where: { userId: req.user.id } });
@@ -8,7 +8,6 @@ export const getClassrooms = async(req, res) => {
 
 export const newClassroom = async(req, res) => {
     const classroom = new Classroom(req.body);
-    classroom.id = generateId();
     classroom.userId = req.user.id;
 
     try {
@@ -84,6 +83,23 @@ export const deleteClassroom = async(req, res) => {
     } catch (error) {
         return res.status(500).json({ msg: error.message + " - Contacte al administrador" });
     }
+};
+
+export const searchUser = async(req, res) => {
+    const { email } = req.body;
+
+    const user = await User.findOne({ where:{ email } });
+
+    if(!user) {
+        const error = new Error("Usuario no encontrado");
+        return res.status(404).json({ msg: error.message });
+    };
+
+    res.json({
+        email: user.email,
+        id: user.id,
+        name: user.name,
+    });
 };
 
 export const addMember = async(req, res) => {

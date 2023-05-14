@@ -24,7 +24,7 @@ export const register = async (req, res) => {
     const { body } = req;
 
     try {
-        const userExists = await User.findOne({ where: { email: body.email } });
+        const userExists = await User.findOne({ where:{ email: body.email } });
     
         if(userExists) {
             const error = new Error("Ya existe un usuario registrado con ese email");
@@ -32,10 +32,7 @@ export const register = async (req, res) => {
         }
 
         const user = new User(body);
-        user.id = generateId();
         user.token = generateId();
-        user.confirmed = false;
-        user.password = await hashPassword(user.password);
         await user.save();
 
         emailRegistration({
@@ -54,7 +51,7 @@ export const authenticate = async(req, res) => {
     const {email, password} = req.body;
 
     //User exists
-    const user = await User.findOne({ where: { email: email } });
+    const user = await User.findOne({ where:{ email } });
     
     if(!user) {
         const error = new Error('El usuario no existe');
@@ -85,7 +82,7 @@ export const confirm = async(req, res) => {
     const { token } = req.params;
     
     try {
-        const userForConfirm = await User.findOne({ where: { token: token } });
+        const userForConfirm = await User.findOne({ where:{ token } });
     
         if(!userForConfirm) {
             const error = new Error('Token no válido');
@@ -93,7 +90,7 @@ export const confirm = async(req, res) => {
         }
 
         userForConfirm.confirmed = true;
-        userForConfirm.token= "";
+        userForConfirm.token= null;
         await userForConfirm.save();
         res.json({ msg: 'Usuario cofirmado exitosamente' });
     } catch (error) {
@@ -105,7 +102,7 @@ export const forgotPassword = async(req, res) => {
     const { email } = req.body;
     
     try {
-        const user = await User.findOne({ where: { email: email } });
+        const user = await User.findOne({ where:{ email } });
         
         if(!user) {
             const error = new Error('No existe el usuario');
@@ -137,7 +134,7 @@ export const checkToken = async(req, res) => {
     const { token } = req.params;
     
     try {
-        const validToken = await User.findOne({ where: { token: token } });
+        const validToken = await User.findOne({ where:{ token } });
         
         if(validToken) {
             res.json({ msg: 'El usuario existe y el token es válido' });
@@ -155,10 +152,10 @@ export const newPassword = async(req, res) => {
     const { password } = req.body;
 
     try {
-        const user = await User.findOne({ where: { token: token } });
+        const user = await User.findOne({ where:{ token } });
         if(user) {
             user.password = await hashPassword(password);
-            user.token = '';
+            user.token = null;
             await user.save();
             res.json({ msg: "Contraseña modificada correctamente"});
         } else {

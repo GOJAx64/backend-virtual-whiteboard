@@ -1,11 +1,11 @@
-import { DataTypes, Model } from 'sequelize';
-import { USER_TABLE } from './User.js';
+import { DataTypes } from 'sequelize';
+import db from '../config/db.js';
+import { User } from './User.js';
 
-export const CLASSROOM_TABLE = 'classrooms'
-
-export const ClassroomSchema = {
+export const Classroom = db.define('classrooms',{
     id: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
         allowNull: false
     },
@@ -22,27 +22,13 @@ export const ClassroomSchema = {
         allowNull: true,
     },
     userId: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         field: 'user_id',
         allowNull: false,
         references: {
-            model: USER_TABLE
+            model: User
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
     }
-};
-
-export class Classroom extends Model {
-    static associate(models) {
-        this.belongsTo(models.User, { as: 'user' })
-    }   
-
-    static config(sequelize){
-        return {
-            sequelize,
-            tableName: CLASSROOM_TABLE,
-            modelName: 'Classroom',
-        }
-    }
-}
+});
