@@ -38,5 +38,10 @@ export const User = db.define('users', {
     }
 });
 
-// User.prototype.hashPassword
-// User.prototype.checkPassword =
+User.prototype.hashPassword = function(password) {
+    return bcrypt.hashSync(password, 10);
+}
+
+User.prototype.checkPassword = function(password) {
+    return bcrypt.compareSync(password, this.password);
+}

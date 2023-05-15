@@ -1,8 +1,6 @@
 import { User } from '../models/User.js';
 import generateId from '../helpers/generateId.js';
 import generateJWT from '../helpers/generateJWT.js';
-import hashPassword from '../helpers/hashPassword.js';
-import checkPassword from '../helpers/checkPassword.js';
 import { emailForgotPassword, emailRegistration } from '../helpers/emails.js';
 
 import { spawn } from 'child_process';
@@ -65,7 +63,7 @@ export const authenticate = async(req, res) => {
     }
 
     //verify password 
-    if( await checkPassword( password, user.password )) {
+    if( user.checkPassword(password) ) {
         res.json({
             id: user.id,
             name: user.name,
@@ -154,7 +152,7 @@ export const newPassword = async(req, res) => {
     try {
         const user = await User.findOne({ where:{ token } });
         if(user) {
-            user.password = await hashPassword(password);
+            user.password = user.hashPassword(password);
             user.token = null;
             await user.save();
             res.json({ msg: "Contraseña modificada correctamente"});
