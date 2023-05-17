@@ -3,15 +3,15 @@ import { Classroom } from './Classroom.js';
 import { Whiteboard } from './Whiteboard.js';
 import { ClassroomUsers } from './ClassroomUsers.js';
 
-// 1:M
+// 1:N
 User.hasMany(Classroom);
 Classroom.belongsTo(User);
 
-// 1:M
+// 1:N
 Classroom.hasMany(Whiteboard);
 Whiteboard.belongsTo(Classroom);
 
-// M:N Members 
+// N:M Members 
 Classroom.belongsToMany(User, { through: 'ClassroomUsers' } );
 User.belongsToMany(Classroom, { through: 'ClassroomUsers' } );
 

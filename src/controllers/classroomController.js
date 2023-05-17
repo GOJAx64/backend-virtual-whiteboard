@@ -1,4 +1,6 @@
+import { where } from "sequelize";
 import { Classroom } from "../models/Classroom.js";
+import { ClassroomUsers } from "../models/ClassroomUsers.js";
 import { User } from "../models/User.js";
 
 export const getClassrooms = async(req, res) => {
@@ -23,7 +25,7 @@ export const getClassroom = async(req, res) => {
     const classroom = await Classroom.findByPk(id);
     
     if(!classroom) {
-        const error = new Error('404 - No encontrado');
+        const error = new Error('404 - Aula no encontrada');
         return res.status(404).json({ msg: error.message });
     }
 
@@ -103,7 +105,54 @@ export const searchUser = async(req, res) => {
 };
 
 export const addMember = async(req, res) => {
+    const { email } = req.body;
+    
+    const classroom = await Classroom.findByPk(req.params.id);
+    
+    if(!classroom) {
+        const error = new Error("Aula no encontrada");
+        return res.status(404).json({ msg: error.message });
+    };
 
+    if(classroom.userId.toString() !== req.user.id.toString()) {
+        const error = new Error('No tienes permisos para realizar esta acción');
+        return res.status(401).json({ msg: error.message });
+    };
+
+    const user = await User.findOne({ where:{ email } });
+
+    if(!user) {
+        const error = new Error("Usuario no encontrado");
+        return res.status(404).json({ msg: error.message });
+    };
+
+    if(classroom.userId.toString() === user.id.toString()) {
+        const error = new Error('No puedes añadirte a ti mismo');
+        return res.status(401).json({ msg: error.message });
+    };
+
+    
+    const isUserRegistered = await ClassroomUsers.findOne({where: { 
+                                classroomId: classroom.id,
+                                userId: user.id
+                            }});
+
+    if(isUserRegistered) {
+        const error = new Error('El usuario ya ha sido registrado en esta aula');
+        return res.status(401).json({ msg: error.message });
+    };
+
+    const classroomUser = new ClassroomUsers({
+        classroomId: classroom.id,
+        userId: user.id,
+    });
+    
+    try {
+        await classroomUser.save();
+        res.json({ msg: 'Usuario agregado correctamente al aula' });
+    } catch (error) {
+        return res.status(500).json({ msg: error.message + " - Contacte al administrador" });
+    }
 };
 
 export const deleteMember = async(req, res) => {
