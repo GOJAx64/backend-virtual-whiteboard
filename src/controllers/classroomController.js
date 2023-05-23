@@ -34,8 +34,20 @@ export const getClassroom = async(req, res) => {
         return res.status(401).json({ msg: error.message });
     }
 
+    const membersQuery = await ClassroomUsers.findAll({ where:{ classroomId: classroom.id } });
     // const whiteboards = await Whiteboard.findAll({ where: { classroomId: classroom.id } });
     
+    const members = await Promise.all(membersQuery.map( async (member) => {
+        const { dataValues } = await User.findByPk(member.dataValues.userId); 
+        const { id, name, email } = dataValues;
+        return {
+            id,
+            name,
+            email,
+        }
+    }));
+    classroom.dataValues.members = members;
+
     res.json(classroom);
 };
 
