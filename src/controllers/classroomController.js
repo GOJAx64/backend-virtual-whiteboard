@@ -1,11 +1,19 @@
-import { where } from "sequelize";
 import { Classroom } from "../models/Classroom.js";
 import { ClassroomUsers } from "../models/ClassroomUsers.js";
 import { User } from "../models/User.js";
 
 export const getClassrooms = async(req, res) => {
     const classrooms = await Classroom.findAll({ where: { userId: req.user.id } });
-    res.json(classrooms);
+    const classesMember = await ClassroomUsers.findAll({ where: { userId: req.user.id } });
+   
+    const memberships = await Promise.all( classesMember.map( async (classMember) => {
+        return await Classroom.findByPk(classMember.dataValues.classroomId); 
+    }));
+
+    res.json({
+        classrooms,
+        memberships
+    });
 };
 
 export const newClassroom = async(req, res) => {
@@ -29,7 +37,12 @@ export const getClassroom = async(req, res) => {
         return res.status(404).json({ msg: error.message });
     }
 
-    if(classroom.userId.toString() !== req.user.id.toString()) {
+    const classroomUser = await ClassroomUsers.findOne({where: { 
+        classroomId: id,
+        userId: req.user.id
+    }});
+
+    if(classroom.userId.toString() !== req.user.id.toString() && !classroomUser) {
         const error = new Error('401 - No tienes permisos para ver este contenido');
         return res.status(401).json({ msg: error.message });
     }
@@ -118,7 +131,6 @@ export const searchUser = async(req, res) => {
 
 export const addMember = async(req, res) => {
     const { email } = req.body;
-    
     const classroom = await Classroom.findByPk(req.params.id);
     
     if(!classroom) {
@@ -168,5 +180,27 @@ export const addMember = async(req, res) => {
 };
 
 export const deleteMember = async(req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ where:{ email } });
+    const classroom = await Classroom.findByPk(req.params.id);
 
+    if(!classroom) {
+        const error = new Error("Aula no encontrada");
+        return res.status(404).json({ msg: error.message });
+    };
+    if(classroom.userId.toString() !== req.user.id.toString()) {
+        const error = new Error('No tienes permisos para realizar esta acción');
+        return res.status(401).json({ msg: error.message });
+    };
+
+    const member = await ClassroomUsers.findOne({where: { 
+                                classroomId: classroom.id,
+                                userId: user.id
+                            }});
+    try {
+        await member.destroy();
+        res.json({ msg: "Participante eliminado"});
+    } catch (error) {
+        return res.status(500).json({ msg: error.message + " - Contacte al administrador" });
+    }
 };

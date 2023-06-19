@@ -9,7 +9,7 @@ const checkAuth = async(req, res, next) => {
             token = req.headers.authorization.split(' ')[1];
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             const { dataValues } = await User.findByPk(decoded.id);
-            // console.log(dataValues);
+            // console.log('\nDataValues: ', dataValues);
             req.user = {
                 id: dataValues.id,
                 name: dataValues.name,

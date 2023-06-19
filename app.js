@@ -5,7 +5,7 @@ import connectDB from './src/config/connectDB.js';
 import authRoutes from './src/routes/authRoutes.js';
 import classroomRoutes from './src/routes/classroomRoutes.js';
 import whiteboardRoutes from './src/routes/whiteboardRoutes.js';
-
+import { Server } from 'socket.io'
 const app = express()
 
 //Read body
@@ -39,6 +39,24 @@ app.use('/api/whiteboards', whiteboardRoutes);
 
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT,  () => {
+const server = app.listen(PORT,  () => {
   console.log(`Servidor en el puerto ${PORT}`);
 });
+
+
+//Socket.io
+const io = new Server(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: process.env.FRONTEND_URL,
+  }
+})
+
+io.on('connection', (socket) => {
+  console.log('Conectado a Socket IO');
+  
+  socket.on('prueba', () => {
+    console.log('Prueba desde socket event');
+    socket.emit('respuesta', { name: 'alberto' });
+  })
+})

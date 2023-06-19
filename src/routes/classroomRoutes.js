@@ -18,8 +18,8 @@ router.get('/:id',    checkAuth, getClassroom);
 router.put('/:id',    checkAuth, editClassroom);
 router.delete('/:id', checkAuth, deleteClassroom);
 
-router.post('/member',       checkAuth, searchUser);
-router.post('/member/:id',   checkAuth, addMember);
-router.delete('/member/:id', checkAuth, deleteMember);
+router.post('/member',            checkAuth, searchUser);
+router.post('/member/:id',        checkAuth, addMember);
+router.post('/delete-member/:id', checkAuth, deleteMember);
 
 export default router;
