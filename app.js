@@ -53,10 +53,12 @@ const io = new Server(server, {
 })
 
 io.on('connection', (socket) => {
-  console.log('Conectado a Socket IO');
+  // console.log('Conectado a Socket IO');
   
-  socket.on('prueba', () => {
-    console.log('Prueba desde socket event');
-    socket.emit('respuesta', { name: 'alberto' });
-  })
+  socket.on('join to classroom', (classroom) => {
+    console.log(classroom)
+    socket.join(classroom.classroom);
+    socket.to(classroom.classroom).emit('Joined', { msg: `Evento desde room: ${classroom.classroom} se unio a la sala: ${classroom.name}`} );
+  });
+
 })
