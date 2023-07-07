@@ -29,6 +29,10 @@ export const User = db.define('users', {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     },
+    online: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    }
 }, {
     hooks: {
         beforeCreate: async function(user) {

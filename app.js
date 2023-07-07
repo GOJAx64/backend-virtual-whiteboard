@@ -6,6 +6,7 @@ import authRoutes from './src/routes/authRoutes.js';
 import classroomRoutes from './src/routes/classroomRoutes.js';
 import whiteboardRoutes from './src/routes/whiteboardRoutes.js';
 import { Server } from 'socket.io'
+import { markUserAsOffline, markUserAsOnline } from './src/controllers/socketsController.js';
 const app = express()
 
 //Read body
@@ -52,13 +53,19 @@ const io = new Server(server, {
   }
 })
 
-io.on('connection', (socket) => {
-  // console.log('Conectado a Socket IO');
+io.on('connection', async (socket) => {
   
-  socket.on('join to classroom', (classroom) => {
-    console.log(classroom)
-    socket.join(classroom.classroom);
-    socket.to(classroom.classroom).emit('Joined', { msg: `Evento desde room: ${classroom.classroom} se unio a la sala: ${classroom.name}`} );
+  socket.on('join to classroom', async({ classroom, user }) => {
+    await markUserAsOnline(user);
+    socket.join(classroom);
+    socket.to(classroom).emit('Joined', { msg: `Evento desde room: ${classroom} se unio a la sala: ${user}`} );
+    
+    //TODO: Desconectarse de la sala.
+  });
+  
+  socket.on('disconnect', async() => {
+    console.log('Desconectar', socket.handshake.query);
+    // await markUserAsOffline(user);
   });
 
 })

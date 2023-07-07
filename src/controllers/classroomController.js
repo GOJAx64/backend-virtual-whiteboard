@@ -52,13 +52,26 @@ export const getClassroom = async(req, res) => {
     
     const members = await Promise.all(membersQuery.map( async (member) => {
         const { dataValues } = await User.findByPk(member.dataValues.userId); 
-        const { id, name, email } = dataValues;
+        const { id, name, email, online } = dataValues;
         return {
             id,
             name,
             email,
+            online,
         }
     }));
+
+    if(classroom.userId.toString() !== req.user.id.toString() ){
+        const user = await User.findByPk(classroom.userId);
+        const admin = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            online: user.online,
+        }
+        members.push(admin);
+    }
+    
     classroom.dataValues.members = members;
 
     res.json(classroom);
