@@ -6,7 +6,7 @@ import authRoutes from './src/routes/authRoutes.js';
 import classroomRoutes from './src/routes/classroomRoutes.js';
 import whiteboardRoutes from './src/routes/whiteboardRoutes.js';
 import { Server } from 'socket.io'
-import { markUserAsOffline, markUserAsOnline } from './src/controllers/socketsController.js';
+import { markUserAsOffline, markUserAsOnline, saveMessage } from './src/controllers/socketController.js';
 const app = express()
 
 //Read body
@@ -55,17 +55,27 @@ const io = new Server(server, {
 
 io.on('connection', async (socket) => {
   
-  socket.on('join to classroom', async({ classroom, user }) => {
-    await markUserAsOnline(user);
-    socket.join(classroom);
-    socket.to(classroom).emit('Joined', { msg: `Evento desde room: ${classroom} se unio a la sala: ${user}`} );
-    
-    //TODO: Desconectarse de la sala.
-  });
-  
-  socket.on('disconnect', async() => {
-    console.log('Desconectar', socket.handshake.query);
-    // await markUserAsOffline(user);
+  socket.on('join to classroom', ({ classroom, user }) => {
+    // await markUserAsOnline(user);
+    // socket.join(classroom);
+    //socket.to(classroom).emit('Joined', { msg: `Evento desde room: ${classroom} se unio a la sala: ${user}`} );
+    // //TODO: Desconectarse de la sala.
   });
 
+  socket.on('join-to-personal-chat', (payload) => {
+    const idRoom = payload.classroomId + '-' + payload.userId;
+    socket.join(idRoom);
+  });
+  
+  socket.on('send-personal-message', async(payload) => {
+    const message = await saveMessage(payload);
+    const idRoom = payload.classroomId + '-' + payload.to;
+    socket.to(idRoom).emit('get-personal-message', message);
+  });
+
+
+  // socket.on('disconnect', async() => {
+  //   console.log('Desconectar', socket.handshake.query);
+  //   // await markUserAsOffline(user);
+  // });
 })
