@@ -55,11 +55,10 @@ const io = new Server(server, {
 
 io.on('connection', async (socket) => {
   
-  socket.on('join to classroom', ({ classroom, user }) => {
+  socket.on('join-to-classroom', (payload) => {
     // await markUserAsOnline(user);
     // socket.join(classroom);
     //socket.to(classroom).emit('Joined', { msg: `Evento desde room: ${classroom} se unio a la sala: ${user}`} );
-    // //TODO: Desconectarse de la sala.
   });
 
   socket.on('join-to-personal-chat', (payload) => {
@@ -70,10 +69,12 @@ io.on('connection', async (socket) => {
   socket.on('send-personal-message', async(payload) => {
     const message = await saveMessage(payload);
     const idRoom = payload.classroomId + '-' + payload.to;
-    socket.to(idRoom).emit('get-personal-message', message);
+    const idFrom = payload.classroomId + '-' + payload.from;
+    io.to(idRoom).emit('get-personal-message', message);
+    io.to(idFrom).emit('get-personal-message', message);
   });
 
-
+  // //TODO: Desconectarse de la sala.
   // socket.on('disconnect', async() => {
   //   console.log('Desconectar', socket.handshake.query);
   //   // await markUserAsOffline(user);
