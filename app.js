@@ -74,9 +74,8 @@ io.on('connection', async (socket) => {
     io.to(idFrom).emit('get-personal-message', message);
   });
 
-  // //TODO: Desconectarse de la sala.
-  // socket.on('disconnect', async() => {
-  //   console.log('Desconectar', socket.handshake.query);
-  //   // await markUserAsOffline(user);
-  // });
+  socket.on('leave-personal-chat', async(payload) => {
+    const idRoom = payload.classroomId + '-' + payload.userId;
+    socket.leave(idRoom);
+  });
 })

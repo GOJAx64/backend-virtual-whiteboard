@@ -70,7 +70,7 @@ export const getClassroom = async(req, res) => {
             online: user.online,
         }
         members.push(admin);
-    }
+    } 
     
     classroom.dataValues.members = members;
 
