@@ -5,6 +5,7 @@ import connectDB from './src/config/connectDB.js';
 import authRoutes from './src/routes/authRoutes.js';
 import classroomRoutes from './src/routes/classroomRoutes.js';
 import whiteboardRoutes from './src/routes/whiteboardRoutes.js';
+import messageRoutes from './src/routes/messageRoutes.js';
 import { Server } from 'socket.io'
 import { markUserAsOffline, markUserAsOnline, saveMessage } from './src/controllers/socketController.js';
 const app = express()
@@ -37,6 +38,7 @@ app.use(cors(corsOptions));
 app.use('/api/auth', authRoutes);
 app.use('/api/classrooms', classroomRoutes);
 app.use('/api/whiteboards', whiteboardRoutes);
+app.use('/api/messages', messageRoutes);
 
 const PORT = process.env.PORT || 4000;
 

@@ -1,3 +1,4 @@
+import { Op } from"sequelize";
 import { Message } from '../models/Message.js';
 import { User } from '../models/User.js';
 
@@ -26,4 +27,25 @@ export const saveMessage = async(payload) => {
         console.log(error);
         return false;
     }
+};
+
+export const getMessages = async(req, res) => {
+    const { id } = req.params;
+    const { from, to } = req.body;
+
+    const messages = await Message.findAll({ 
+        where: { 
+            classroomId: id,
+            [Op.or]: [
+                { to: to, from: from },
+                { from: to, to: from } 
+            ]
+        },
+        order: [
+            ['createdAt', 'ASC']
+        ],
+        limit: 500
+    });
+    
+    res.json(messages);
 };
