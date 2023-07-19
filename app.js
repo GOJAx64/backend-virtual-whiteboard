@@ -1,13 +1,19 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import { Server } from 'socket.io'
+
 import connectDB from './src/config/connectDB.js';
+import { connectMongoDB } from './src/config/connectMongoDB.js';
+
 import authRoutes from './src/routes/authRoutes.js';
 import classroomRoutes from './src/routes/classroomRoutes.js';
 import whiteboardRoutes from './src/routes/whiteboardRoutes.js';
 import messageRoutes from './src/routes/messageRoutes.js';
-import { Server } from 'socket.io'
+import imageRoutes from './src/routes/imageRoutes.js';
+
 import { markUserAsOffline, markUserAsOnline, saveMessage } from './src/controllers/socketController.js';
+
 const app = express()
 
 //Read body
@@ -18,6 +24,7 @@ dotenv.config();
 
 //Connection with Database
 connectDB();
+connectMongoDB();
 
 //CORS
 const whiteList = [process.env.FRONTEND_URL];
@@ -39,6 +46,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/classrooms', classroomRoutes);
 app.use('/api/whiteboards', whiteboardRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/images', imageRoutes);
 
 const PORT = process.env.PORT || 4000;
 
