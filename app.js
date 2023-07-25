@@ -8,7 +8,7 @@ import { connectMongoDB } from './src/config/connectMongoDB.js';
 
 import authRoutes from './src/routes/authRoutes.js';
 import classroomRoutes from './src/routes/classroomRoutes.js';
-import whiteboardRoutes from './src/routes/whiteboardRoutes.js';
+import activityRoutes from './src/routes/activityRoutes.js';
 import messageRoutes from './src/routes/messageRoutes.js';
 import imageRoutes from './src/routes/imageRoutes.js';
 
@@ -44,7 +44,7 @@ app.use(cors(corsOptions));
 //Routing
 app.use('/api/auth', authRoutes);
 app.use('/api/classrooms', classroomRoutes);
-app.use('/api/whiteboards', whiteboardRoutes);
+app.use('/api/activities', activityRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/images', imageRoutes);
 
