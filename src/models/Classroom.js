@@ -14,7 +14,7 @@ export const Classroom = db.define('classrooms',{
         allowNull: false,
     },
     description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     summary: {

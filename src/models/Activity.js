@@ -14,7 +14,7 @@ export const Activity = db.define('activities', {
         allowNull: false,
     },
     description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     dueDate: {
