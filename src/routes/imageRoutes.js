@@ -8,7 +8,7 @@ router.post('/upload', checkAuth, async(req, res) => {
     try {
       const newImage = await new Image(req.body);
       await newImage.save();
-      res.status(201).json({message: "new image uploaded", createdPost: newImage});
+      res.status(201).json({message: "new image uploaded", imageId: newImage.id });
     } catch (error) {
       console.log(error)
       res.status(500).json({
