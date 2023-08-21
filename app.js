@@ -17,7 +17,10 @@ import { markUserAsOffline, markUserAsOnline, saveMessage } from './src/controll
 const app = express()
 
 //Read body
-app.use(express.json());
+// app.use(express.json());
+app.use(express.json({limit: '50mb', extended: true}));
+app.use(express.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+app.use(express.text({ limit: '200mb' }));
 
 //ENV variables
 dotenv.config();
