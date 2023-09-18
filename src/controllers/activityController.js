@@ -45,7 +45,12 @@ export const getActivity = async(req, res) => {
 };
 
 export const getActivities = async(req, res) => {
-    const activities = await Activity.findAll({ where: { classroomId: req.params.id } });
+    const activities = await Activity.findAll({ 
+        where: { classroomId: req.params.id }, 
+        order: [
+            ['dueDate', 'ASC'],
+        ]
+    });
     res.json(activities);
 };
 
