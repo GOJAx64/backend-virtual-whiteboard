@@ -23,4 +23,14 @@ router.get('/:id', checkAuth, async(req, res) => {
   res.json(images);
 });
 
+router.delete('/:id', checkAuth, async(req, res) => {
+  const { id } = req.params;
+  const image = Image.findById(id);
+  try {
+    await image.deleteOne();
+    res.json({ msg: "Imagen Eliminada"});
+  } catch (error) {
+    return res.status(500).json({ msg: error.message + " - Contacte al administrador" });
+  }
+});
 export default router;
