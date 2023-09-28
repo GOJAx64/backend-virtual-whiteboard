@@ -3,22 +3,7 @@ import generateId from '../helpers/generateId.js';
 import generateJWT from '../helpers/generateJWT.js';
 import { emailForgotPassword, emailRegistration } from '../helpers/emails.js';
 
-import { spawn } from 'child_process';
-
-
 export const register = async (req, res) => {
-    // const pythonProcess = spawn('python', ['main.py'])
-    // let dataToSend;
-
-    // pythonProcess.stdout.on('data', (data) => {
-    //     console.log('Ejecutando python')
-    // });
-
-    // pythonProcess.on('close', (code) => {
-    //     console.log(`exit with code ${code}`)
-    //     // res.send(dataToSend)
-    // });
-
     const { body } = req;
 
     try {
@@ -168,4 +153,23 @@ export const newPassword = async(req, res) => {
 export const profile = async(req, res) => {
     const { user } = req;
     res.json(user);
+};
+
+export const updateProfileName = async(req, res) => {
+    const { name } = req.body;
+    
+    try {
+        const user = await User.findOne({ where:{ id: req.user.id } });
+        
+        if(!user) {
+            const error = new Error('No existe el usuario');
+            return res.status(404).json({ msg: error.message });
+        }
+        user.name = name;
+        await user.save();
+        req.user.name = name;
+        res.json({ msg: 'Usuario modificado' });
+    } catch (error) {
+        return res.status(500).json({ msg: error.message + " - Contacte al administrador" });
+    }
 };
