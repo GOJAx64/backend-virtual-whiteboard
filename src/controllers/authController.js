@@ -32,7 +32,6 @@ export const register = async (req, res) => {
 
 export const authenticate = async(req, res) => {
     const {email, password} = req.body;
-
     //User exists
     const user = await User.findOne({ where:{ email } });
     
