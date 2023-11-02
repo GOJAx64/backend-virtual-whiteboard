@@ -46,7 +46,7 @@ export const getClassroom = async(req, res) => {
         const error = new Error('401 - No tienes permisos para ver este contenido');
         return res.status(401).json({ msg: error.message });
     }
-
+    
     const membersQuery = await ClassroomUsers.findAll({ where:{ classroomId: classroom.id } });
     // const whiteboards = await Whiteboard.findAll({ where: { classroomId: classroom.id } });
     
@@ -73,7 +73,6 @@ export const getClassroom = async(req, res) => {
     } 
     
     classroom.dataValues.members = members;
-
     res.json(classroom);
 };
 

@@ -13,6 +13,7 @@ import messageRoutes from './src/routes/messageRoutes.js';
 import imageRoutes from './src/routes/imageRoutes.js';
 
 import { markUserAsOffline, markUserAsOnline, saveMessage } from './src/controllers/socketController.js';
+import { checkJWT } from './src/helpers/jwt.js';
 
 const app = express()
 
@@ -68,12 +69,22 @@ const io = new Server(server, {
 
 io.on('connection', async (socket) => {
   
+  const [ valid, id ] = checkJWT( socket.handshake.query['x-token']  );
+  if ( !valid ) {
+      console.log('Socket no identificado');
+      return socket.disconnect();
+  }
+
+  await markUserAsOnline( id );
+  io.emit('status-user', { id, status: true });
+
+
   socket.on('join-to-classroom', (payload) => {
     // await markUserAsOnline(user);
     // socket.join(classroom);
     //socket.to(classroom).emit('Joined', { msg: `Evento desde room: ${classroom} se unio a la sala: ${user}`} );
   });
-
+  
   socket.on('join-to-personal-chat', (payload) => {
     const idRoom = payload.classroomId + '-' + payload.userId;
     socket.join(idRoom);
@@ -91,4 +102,9 @@ io.on('connection', async (socket) => {
     const idRoom = payload.classroomId + '-' + payload.userId;
     socket.leave(idRoom);
   });
+
+  socket.on('disconnect', async() => {
+    await markUserAsOffline( id );
+    io.emit('status-user', { id, status: false });
+  })
 })
