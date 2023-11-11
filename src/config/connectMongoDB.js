@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const connectMongoDB = async() => {
+    console.log(process.env.MONGO_DB_CONNECTION_STRING);
+    console.log(typeof(process.env.MONGO_DB_CONNECTION_STRING));
     try {
         await mongoose.connect( process.env.MONGO_DB_CONNECTION_STRING, {
             useNewUrlParser: true,
