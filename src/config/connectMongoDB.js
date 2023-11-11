@@ -1,19 +1,11 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-dotenv.config({path:__dirname+'/.env'});
-
+dotenv.config();
 
 export const connectMongoDB = async() => {
-    console.log(process.env.MONGO_DB_CONNECTION_STRING);
-    console.log(typeof(process.env.MONGO_DB_CONNECTION_STRING));
+    
     try {
-        await mongoose.connect( process.env.MONGO_DB_CONNECTION_STRING, {
+        await mongoose.connect("mongodb+srv://chat_user:chat_user123@uptask-mern.sb1cxkm.mongodb.net/virtual-classrooms-images", {
             useNewUrlParser: true,
             useUnifiedTopology: true,         
         });

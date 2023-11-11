@@ -77,13 +77,6 @@ io.on('connection', async (socket) => {
 
   await markUserAsOnline( id );
   io.emit('status-user', { id, status: true });
-
-
-  socket.on('join-to-classroom', (payload) => {
-    // await markUserAsOnline(user);
-    // socket.join(classroom);
-    //socket.to(classroom).emit('Joined', { msg: `Evento desde room: ${classroom} se unio a la sala: ${user}`} );
-  });
   
   socket.on('join-to-personal-chat', (payload) => {
     const idRoom = payload.classroomId + '-' + payload.userId;
