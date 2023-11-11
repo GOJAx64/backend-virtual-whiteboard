@@ -2,10 +2,10 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config();
 
+
 export const connectMongoDB = async() => {
-    
     try {
-        await mongoose.connect("mongodb+srv://chat_user:chat_user123@uptask-mern.sb1cxkm.mongodb.net/virtual-classrooms-images", {
+        await mongoose.connect( process.env.MONGO_DB_CONNECTION_STRING, {
             useNewUrlParser: true,
             useUnifiedTopology: true,         
         });
