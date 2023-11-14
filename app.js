@@ -52,7 +52,8 @@ app.use('/api/activities', activityRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/images', imageRoutes);
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
+console.log('PORT: ', PORT);
 
 const server = app.listen(PORT,  () => {
   console.log(`Servidor en el puerto ${PORT}`);
