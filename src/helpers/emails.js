@@ -15,11 +15,11 @@ export const emailRegistration = async( data ) => {
     });
 
     const info = await transport.sendMail({
-        from: '"Pizarrones Virtuales" <main@pizarrones.virtuales.com>',
+        from: '"Aulas Virtuales" <main@aulas.virtuales.com>',
         to: email,
-        subject: 'Confirmación de cuenta en: Pizarrones Virtuales',
-        text: 'Confirma tu cuenta en Pizarrones Virtuales',
-        html: `<p>Hola: ${name}, confirma tu cuenta en Pizarrones Virtuales</p>
+        subject: 'Confirmación de cuenta en: Aulas Virtuales',
+        text: 'Confirma tu cuenta en Aulas Virtuales',
+        html: `<p>Hola: ${name}, confirma tu cuenta en Aulas Virtuales</p>
                <p>Tu cuenta ya está casi lista, solo accede al siguiente enlace:
                     <a href="${process.env.FRONTEND_URL}/confirm_account/${token}">Confirmar Cuenta</a>
                </p>
@@ -40,9 +40,9 @@ export const emailForgotPassword = async( data ) => {
     });
 
     const info = await transport.sendMail({
-        from: '"Pizarrones Virtuales" <main@pizarrones.virtuales.com>',
+        from: '"Aulas Virtuales" <main@aulas.virtuales.com>',
         to: email,
-        subject: 'Pizarrones Virtuales Reestablece tu contraseña',
+        subject: 'Aulas Virtuales Reestablece tu contraseña',
         text: 'Reestablece tu contraseña',
         html: `<p>Hola: ${name}, has solicitado reestablecer tu contraseña</p>
                <p>accede al siguiente enlace para reestablecer tu contraseña:
