@@ -15,7 +15,7 @@ import imageRoutes from './src/routes/imageRoutes.js';
 import { markUserAsOffline, markUserAsOnline, saveMessage } from './src/controllers/socketController.js';
 import { checkJWT } from './src/helpers/jwt.js';
 
-dotenv.config();
+dotenv.config({ path: '.env' });
 const app = express()
 
 //Read body

@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: '.env' });
 
 export const emailRegistration = async( data ) => {
     const { email, name, token } = data;

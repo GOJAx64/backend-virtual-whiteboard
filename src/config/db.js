@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: '.env' });
 import { Sequelize } from 'sequelize';
 
 console.log(process.env.DB);
