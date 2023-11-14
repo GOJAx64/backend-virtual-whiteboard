@@ -1,5 +1,5 @@
-import express from 'express';
 import dotenv from 'dotenv';
+import express from 'express';
 import cors from 'cors';
 import { Server } from 'socket.io'
 
@@ -15,6 +15,7 @@ import imageRoutes from './src/routes/imageRoutes.js';
 import { markUserAsOffline, markUserAsOnline, saveMessage } from './src/controllers/socketController.js';
 import { checkJWT } from './src/helpers/jwt.js';
 
+dotenv.config();
 const app = express()
 
 //Read body
@@ -24,7 +25,6 @@ app.use(express.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}
 app.use(express.text({ limit: '200mb' }));
 
 //ENV variables
-dotenv.config();
 
 //Connection with Database
 connectDB();
